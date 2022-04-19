@@ -1,36 +1,93 @@
 import processing.core.PApplet;
+import processing.core.PImage;
+
+/**
+ * This program animates a cloud, a circle, and a bee over an image background
+ * @author T. Guo
+ *
+ */
 
 public class Sketch extends PApplet {
 	
+  // Initialising and declaring global variables
+  PImage imgBackground;
+  PImage imgCloud;
+  PImage imgBee;
+
+  float fltCloudX = 200;
+  float fltCloudXSpd = 2;
+
+  float fltCircleX = 400;
+  float fltCircleY = 400;
+  float fltCircleXSpd = 3;
+  float fltCircleYSpd = -2;
+
+  float fltBeeX = 80;
+  float fltBeeXSpd = 3;
+  float fltBeeY;
+  int beeFlip = -1; // Changes the orientation of the bee. Kinda acts like a Boolean
 	
-  /**
-   * Called once at the beginning of execution, put your size all in this method
-   */
-  public void settings() {
-	// put your size call here
-    size(400, 400);
+
+  public void settings() {  
+    size(800, 800);
   }
 
-  /** 
-   * Called once at the beginning of execution.  Add initial set up
-   * values here i.e background, stroke, fill etc.
-   */
+
   public void setup() {
-    background(210, 255, 173);
+    imgBackground = loadImage("BlissWindows.png");
+    imgBackground.resize(800, 800);
+    
+    imgCloud = loadImage("cloud.png");
+    imgCloud.resize(imgCloud.width / 8, imgCloud.height / 8);
+
+    imgBee = loadImage("bee.png");
+    imgBee.resize(imgBee.width / 4, imgBee.height / 4);
   }
 
-  /**
-   * Called repeatedly, anything drawn to the screen goes here
-   */
-  public void draw() {
-	  
-	// sample code, delete this stuff
-    stroke(128);
-    line(150, 25, 270, 350);  
 
-    stroke(255);
-    line(50, 125, 70, 50);  
+  public void draw() {
+
+    // Cloud animation
+	  image(imgBackground,0, 0);
+    image(imgCloud, fltCloudX, 100);
+
+    fltCloudX += fltCloudXSpd;
+
+    if (fltCloudX > width - imgCloud.width || fltCloudX < 0){
+      fltCloudXSpd *= -1;
+    }
+
+
+
+    // Circle animation
+    fill(255, 255, 0);
+    ellipse(fltCircleX, fltCircleY, 10, 10);
+
+    fltCircleX += fltCircleXSpd;
+    fltCircleY += fltCircleYSpd;
+
+    if (fltCircleX < 0 + 10 || fltCircleX > width - 10) {
+      fltCircleXSpd *= -1;
+    }
+  
+    if (fltCircleY < 0 + 10  || fltCircleY > height - 10) {
+      fltCircleYSpd *= -1;
+    }
+
+    
+
+    // Bee animation
+    scale(beeFlip, 1);
+    image(imgBee, fltBeeX * beeFlip - imgBee.width, fltBeeY);
+    
+    fltBeeX += fltBeeXSpd;
+    fltBeeY = 300 + sin(fltBeeX / 30) * 100;
+
+    if (fltBeeX > width - imgBee.width|| fltBeeX < 0 + imgBee.width){
+      beeFlip *= -1;
+      fltBeeXSpd *= -1;
+    }
+
   }
   
-  // define other methods down here.
 }
